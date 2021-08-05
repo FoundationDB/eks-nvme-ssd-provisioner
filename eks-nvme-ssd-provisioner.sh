@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+set -x
 
 mapfile -t SSD_NVME_DEVICE_LIST < <(nvme list | awk '/Amazon EC2 NVMe Instance Storage/{print $1}' || true)
 SSD_NVME_DEVICE_COUNT=${#SSD_NVME_DEVICE_LIST[@]}
