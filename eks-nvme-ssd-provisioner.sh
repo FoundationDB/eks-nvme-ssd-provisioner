@@ -25,10 +25,10 @@ case ${SSD_NVME_DEVICE_COUNT} in
     i=0
     for DEVICE in "${SSD_NVME_DEVICE_LIST[@]}"; do
         ((i+=1))
-        mkfs.xfs -f -m crc=0 -b size="${FILESYSTEM_BLOCK_SIZE}" "${DEVICE}"
+        mkfs.ext4 -m 0 -b "${FILESYSTEM_BLOCK_SIZE}" "${DEVICE}"
         UUID=$(blkid -s UUID -o value "${DEVICE}")
         mkdir -p /pv-disks/"${UUID}"
-        mount -o defaults,noatime,discard,nobarrier --uuid "${UUID}" /pv-disks/"${UUID}"
+        mount -t ext4 -o defaults,noatime,discard,nobarrier --uuid "${UUID}" /pv-disks/"${UUID}"
         mkdir -p /nvme
         ln -s /pv-disks/"${UUID}" /nvme/disk"${i}"
         echo "Device ${DEVICE} has been mounted to /pv-disks/${UUID}"
